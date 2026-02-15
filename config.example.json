@@ -1,0 +1,20 @@
+{
+    "llm_config": {
+        "provider": "openai",
+        "api_base": "https://api.openai.com/v1",
+        "api_key": "sk-your-api-key-here",
+        "model": "gpt-4",
+        "temperature": 0.7,
+        "max_tokens": 200000
+    },
+    "agent_config": {
+        "thread_id": "default",
+        "enable_memory": true,
+        "enable_middleware": true
+    },
+    "debug": {
+        "verbose": true,
+        "log_tool_calls": true,
+        "log_middleware": true
+    }
+}

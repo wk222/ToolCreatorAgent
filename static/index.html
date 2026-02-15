@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToolCreatorAgent — 智能体工厂</title>
+    <meta name="description" content="具有自主工具创建和智能体创建能力的超级智能体系统">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <div class="app">
+        <!-- ===== Sidebar ===== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>🧠 ToolCreatorAgent</h1>
+                <div class="subtitle">自主工具创建 · 智能体工厂</div>
+            </div>
+
+            <button class="new-chat-btn" onclick="createConversation()">
+                <span>＋</span> 新建会话
+            </button>
+
+            <div class="conversation-list" id="convList"></div>
+        </aside>
+
+        <!-- ===== Main Chat ===== -->
+        <main class="main">
+            <div class="chat-header">
+                <div>
+                    <div class="chat-title" id="chatTitle">选择或创建一个会话</div>
+                    <div class="chat-thread-id" id="chatThreadId"></div>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" onclick="togglePanel('agents')" title="智能体管理">🤖</button>
+                    <button class="icon-btn" onclick="togglePanel('tools')" title="工具管理">🔧</button>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="empty-state" id="emptyState">
+                    <div class="logo">🛠️</div>
+                    <h2>欢迎使用 ToolCreatorAgent</h2>
+                    <p>我是一个能够<strong>自主创建工具和智能体</strong>的超级助手。<br>
+                        试试对我说："创建一个计算圆面积的工具" 或 "创建一个数据分析师智能体"。</p>
+                </div>
+            </div>
+
+            <!-- 执行步骤面板 -->
+            <div class="steps-bar" id="stepsBar" style="display:none;">
+                <div class="steps-bar-header">
+                    <span class="steps-spinner"></span>
+                    <span>执行中...</span>
+                    <button class="steps-toggle" onclick="toggleStepsExpand()" title="展开/折叠">▼</button>
+                </div>
+                <div class="steps-list" id="stepsList"></div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="input-wrapper">
+                    <textarea id="messageInput" placeholder="输入消息... (Enter 发送, Shift+Enter 换行)" rows="1"
+                        disabled></textarea>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- ===== Right Panel ===== -->
+        <aside class="right-panel" id="rightPanel">
+            <!-- Tab 切换 -->
+            <div class="panel-tabs">
+                <button class="panel-tab active" onclick="switchPanelTab('status')" data-tab="status">状态</button>
+                <button class="panel-tab" onclick="switchPanelTab('agents')" data-tab="agents">智能体</button>
+                <button class="panel-tab" onclick="switchPanelTab('tools')" data-tab="tools">工具</button>
+            </div>
+
+            <!-- 状态 Tab -->
+            <div class="panel-content" id="panel-status">
+                <div class="panel-section">
+                    <div class="panel-section-title">🤖 活跃智能体</div>
+                    <div id="agentsList"><span class="panel-empty">暂无智能体</span></div>
+                </div>
+                <div class="panel-section">
+                    <div class="panel-section-title">🔧 已有工具</div>
+                    <div id="toolsList"><span class="panel-empty">暂无工具</span></div>
+                </div>
+                <div class="panel-section">
+                    <div class="panel-section-title">📊 系统信息</div>
+                    <div style="font-size:12px; color:var(--text-muted); line-height:1.8;">
+                        <div>模式: <span style="color:var(--success);">7x24 Service</span></div>
+                        <div>持久化: <span style="color:var(--success);">SQLite</span></div>
+                        <div>引擎: LangChain 1.x</div>
+                        <div>流式: <span style="color:var(--success);">SSE Streaming</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 智能体管理 Tab -->
+            <div class="panel-content" id="panel-agents" style="display:none;">
+                <div class="panel-section">
+                    <div class="panel-section-title"
+                        style="display:flex;justify-content:space-between;align-items:center;">
+                        <span>🤖 智能体管理</span>
+                        <button class="mini-btn" onclick="refreshAgents()">刷新</button>
+                    </div>
+                    <div id="agentsManageList"><span class="panel-empty">加载中...</span></div>
+                </div>
+            </div>
+
+            <!-- 工具管理 Tab -->
+            <div class="panel-content" id="panel-tools" style="display:none;">
+                <div class="panel-section">
+                    <div class="panel-section-title"
+                        style="display:flex;justify-content:space-between;align-items:center;">
+                        <span>🔧 工具管理</span>
+                        <button class="mini-btn" onclick="refreshTools()">刷新</button>
+                    </div>
+                    <div id="toolsManageList"><span class="panel-empty">加载中...</span></div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
